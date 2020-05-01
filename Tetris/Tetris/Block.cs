@@ -1,15 +1,15 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace Tetris
 {
-    class Cube
+    public class Block
     {
         public const int Size = 20;
 
         private Point position;
-        public Point Position 
-        {   get
+        public Point Position
+        {
+            get
             {
                 if (HasParent)
                     position = new Point(Parent.Position.X + Offset.X, Parent.Position.Y + Offset.Y);
@@ -18,28 +18,22 @@ namespace Tetris
             private set
             {
                 position = value;
-            } 
+            }
         }
         public Brush Brush { get; private set; }
-        public Cube Parent { get; set; }
+        public Block Parent { get; set; }
+        public Point Offset { get; set; }
 
-        public bool HasParent => Parent != null;
+        public bool HasParent
+            => Parent != null;
 
-        public Point Offset = Point.Empty;
-
-        public Cube(Cube cube)
-        {
-            Position = cube.Position;
-            Brush = cube.Brush;
-        }
-
-        public Cube(Point position, Brush brush)
+        public Block(Point position, Brush brush)
         {
             Position = position;
             Brush = brush;
         }
 
-        public Cube(Cube parent, Point offset, Brush brush) 
+        public Block(Block parent, Point offset, Brush brush)
             : this(new Point(parent.Position.X + offset.X, parent.Position.Y + offset.Y), brush)
         {
             Parent = parent;
@@ -48,21 +42,21 @@ namespace Tetris
 
         public void MoveTo(Direction direction)
         {
-            if (HasParent) 
+            if (HasParent)
                 return;
             switch (direction)
             {
                 case Direction.Right:
-                    Position = new Point(Position.X + Cube.Size, Position.Y);
+                    Position = new Point(Position.X + Block.Size, Position.Y);
                     break;
                 case Direction.Left:
-                    Position = new Point(Position.X - Cube.Size, Position.Y);
+                    Position = new Point(Position.X - Block.Size, Position.Y);
                     break;
                 case Direction.Down:
-                    Position = new Point(Position.X, Position.Y + Cube.Size);
+                    Position = new Point(Position.X, Position.Y + Block.Size);
                     break;
                 case Direction.Up:
-                    Position = new Point(Position.X, Position.Y - Cube.Size);
+                    Position = new Point(Position.X, Position.Y - Block.Size);
                     break;
                 default:
                     break;

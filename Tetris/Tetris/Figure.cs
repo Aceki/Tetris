@@ -2,51 +2,46 @@
 using System;
 using System.Windows.Forms;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace Tetris
 {
-    class Figure
+    public class Figure
     {
+        public const double RotateAngle = Math.PI / 2;
         public readonly FigureType Type;
 
-        public Point Position => Cubes.OrderBy(c => c.Position.Y).Last().Position;
+        public Point Position
+            => Blocks[0].Position;
 
-        public Cube[] Cubes;
+        public Block[] Blocks;
 
-        private Cube rootCube;
+        private Block rootBlock;
 
-        public Figure(Cube[] cubes, FigureType type)
+        public Figure(Block[] blocks, FigureType type)
         {
-            rootCube = cubes[0];
-            this.Cubes = cubes;
+            rootBlock = blocks[0];
+            this.Blocks = blocks;
             Type = type;
         }
 
         public void MoveTo(Direction direction)
-            => rootCube.MoveTo(direction);
+            => rootBlock.MoveTo(direction);
 
         public void Rotate()
         {
             if (Type == FigureType.O)
                 return;
-            var angle = Math.PI / 2d;
-            var newOffsets = new Point[4];
             for (var i = 1; i < 4; i++)
             {
-                var x = (int)(Cubes[i].Offset.X * Math.Cos(angle) - Cubes[i].Offset.Y * Math.Sin(angle));
-                var y = (int)(Cubes[i].Offset.X * Math.Sin(angle) + Cubes[i].Offset.Y * Math.Cos(angle));
-                newOffsets[i] = new Point(x, y);
-            }
-            for (var i = 1; i < 4; i++)
-            {
-                Cubes[i].Offset = newOffsets[i];
+                var x = (int)(Blocks[i].Offset.X * Math.Cos(RotateAngle) - Blocks[i].Offset.Y * Math.Sin(RotateAngle));
+                var y = (int)(Blocks[i].Offset.X * Math.Sin(RotateAngle) + Blocks[i].Offset.Y * Math.Cos(RotateAngle));
+                Blocks[i].Offset = new Point(x, y);
             }
         }
 
         public void Draw(Graphics graphics)
         {
-            foreach (var block in Cubes)
+            foreach (var block in Blocks)
                 block.Draw(graphics);
         }
     }

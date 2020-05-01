@@ -6,12 +6,13 @@ namespace Tetris
     public partial class MenuForm : Form
     {
         private Timer timer = new Timer();
-        private GameModel gameModel;
+        private Game gameModel;
 
         public MenuForm()
         {
             InitializeComponent();
-            gameModel = new GameModel(new Size(this.ClientSize.Width, this.ClientSize.Height));
+            gameModel = new Game(new Size(10, 20));
+            gameModel.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
             timer.Interval = 200;
             timer.Tick += (s, args) => gameModel.Update();
             timer.Tick += (s, args) => Invalidate();

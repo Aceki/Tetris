@@ -49,12 +49,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control.cs" />
-    <Compile Include="Cube.cs" />
+    <Compile Include="Block.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Figure.cs" />
     <Compile Include="FigureType.cs" />
-    <Compile Include="GameModel.cs" />
-    <Compile Include="IGameObject.cs" />
+    <Compile Include="GameEndEventArgs.cs" />
+    <Compile Include="GameOverEventHandler.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
