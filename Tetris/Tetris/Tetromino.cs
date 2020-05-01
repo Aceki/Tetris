@@ -18,7 +18,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
                         fArray[2] = new Cube(fArray[0], new Point(0, -Cube.Size), brush);
-                        fArray[3] = new Cube(fArray[2], new Point(0, -Cube.Size), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(0, -Cube.Size * 2), brush);
                         return new Figure(fArray, type);
                     };
                 case FigureType.T:
@@ -34,7 +34,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
                         fArray[2] = new Cube(fArray[0], new Point(0, -Cube.Size), brush);
-                        fArray[3] = new Cube(fArray[2], new Point(Cube.Size, 0), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(-Cube.Size, Cube.Size), brush);
                         return new Figure(fArray, type);
                     }
                 case FigureType.L:
@@ -42,7 +42,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
                         fArray[2] = new Cube(fArray[0], new Point(0, -Cube.Size), brush);
-                        fArray[3] = new Cube(fArray[2], new Point(-Cube.Size, 0), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(Cube.Size, Cube.Size), brush);
                         return new Figure(fArray, type);
                     }
                 case FigureType.O:
@@ -50,7 +50,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(Cube.Size, 0), brush);
                         fArray[2] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
-                        fArray[3] = new Cube(fArray[2], new Point(Cube.Size, 0), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(Cube.Size, Cube.Size), brush);
                         return new Figure(fArray, type);
                     }
                 case FigureType.S:
@@ -58,7 +58,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
                         fArray[2] = new Cube(fArray[0], new Point(Cube.Size, 0), brush);
-                        fArray[3] = new Cube(fArray[1], new Point(-Cube.Size, 0), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(-Cube.Size, Cube.Size), brush);
                         return new Figure(fArray, type);
                     }
                 case FigureType.Z:
@@ -66,7 +66,7 @@ namespace Tetris
                         fArray[0] = new Cube(position, brush);
                         fArray[1] = new Cube(fArray[0], new Point(0, Cube.Size), brush);
                         fArray[2] = new Cube(fArray[0], new Point(-Cube.Size, 0), brush);
-                        fArray[3] = new Cube(fArray[1], new Point(Cube.Size, 0), brush);
+                        fArray[3] = new Cube(fArray[0], new Point(Cube.Size, Cube.Size), brush);
                         return new Figure(fArray, type);
                     }
                 default: throw new Exception("This figure type isn't exists!");
@@ -80,7 +80,8 @@ namespace Tetris
                 Brushes.Red, 
                 Brushes.Aqua, 
                 Brushes.Green, 
-                Brushes.Orange 
+                Brushes.Orange,
+                Brushes.Purple
             };
             return bArray[rnd.Next(0, bArray.Length)];
         }

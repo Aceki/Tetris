@@ -9,7 +9,7 @@ namespace Tetris
     {
         static void Main(string[] args)
         {
-            var form = new MyForm();
+            var form = new MenuForm();
             Application.Run(form);
         }
     }

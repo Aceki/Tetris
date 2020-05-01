@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Tetris
 {
-    public interface IUpdatable
+    public enum Direction
     {
-        void Update();
+        Up,
+        Left,
+        Down,
+        Right
     }
 }

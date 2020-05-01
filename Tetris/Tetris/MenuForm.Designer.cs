@@ -2,11 +2,8 @@
 
 namespace Tetris
 {
-    partial class MyForm
+    partial class MenuForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>ывфывasdasd
@@ -28,15 +25,16 @@ namespace Tetris
         {
             this.SuspendLayout();
             // 
-            // MyForm
+            // MenuForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            //this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(200, 400);
             this.DoubleBuffered = true;
+            this.KeyPress += Control.KeyPressed;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.Name = "MyForm";
+            this.Name = "MenuForm";
             this.ResumeLayout(false);
 
         }
