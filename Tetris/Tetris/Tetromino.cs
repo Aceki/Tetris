@@ -6,6 +6,14 @@ namespace Tetris
     public static class Tetromino
     {
         private static Random rnd = new Random();
+        public static Brush[] AllowedBrushes = new[]
+        {
+            Brushes.Red,
+            Brushes.Aqua,
+            Brushes.Green,
+            Brushes.Orange,
+            Brushes.Purple
+        };
 
         public static Figure CreateFigure(FigureType type, Point position)
         {
@@ -60,17 +68,7 @@ namespace Tetris
         }
 
         public static Brush GetRandomBrush()
-        {
-            var bArray = new Brush[] 
-            { 
-                Brushes.Red, 
-                Brushes.Aqua, 
-                Brushes.Green, 
-                Brushes.Orange,
-                Brushes.Purple
-            };
-            return bArray[rnd.Next(0, bArray.Length)];
-        }
+            => AllowedBrushes[rnd.Next(0, AllowedBrushes.Length)];
 
         public static Figure CreateRandomFigure(Point position)
             => CreateFigure((FigureType)rnd.Next(0, 7), position);

@@ -13,16 +13,11 @@ namespace Tetris
 
         private Size gameFieldSize;
         private Block[,] gameField;
-        private Random random;
         private Figure fallingFigure;
 
-        
-            
         public Game(Size gameFieldSize)
         {
             this.gameFieldSize = gameFieldSize;
-            random = new Random();
-            Start();
         }
 
         public void Start()
@@ -30,12 +25,12 @@ namespace Tetris
             GameIsOver = false;
             Scores = 0;
             gameField = new Block[gameFieldSize.Width, gameFieldSize.Height];
-            fallingFigure = Tetromino.CreateFigure(FigureType.I, new Point(2 * Block.Size, -Block.Size)); //TODO:
+            fallingFigure = Tetromino.CreateRandomFigure(new Point(2 * Block.Size, -Block.Size));
         }
 
-        public bool InBounds(Point point) //TODODODODOOD:
+        public bool InBounds(Point point)
         {
-            return point.X >= 0 && point.X < gameFieldSize.Width && point.Y < gameFieldSize.Height; //TODO:
+            return point.X >= 0 && point.X < gameFieldSize.Width && point.Y < gameFieldSize.Height;
         }
 
         public bool CanMoveFigureTo(Direction direction, Figure figure)
@@ -58,8 +53,7 @@ namespace Tetris
             }
             foreach (var block in figure.Blocks)
             {
-                var newBlockPosition = new Point(block.Position.X + offset.X, block.Position.Y + offset.Y);
-                var newBlockFieldPosition = GetFieldPoint(newBlockPosition);
+                var newBlockFieldPosition = GetFieldPoint(new Point(block.Position.X + offset.X, block.Position.Y + offset.Y));
                 if (!InBounds(newBlockFieldPosition))
                     return false;
                 if (newBlockFieldPosition.Y >= 0 && gameField[newBlockFieldPosition.X, newBlockFieldPosition.Y] != null)
@@ -70,11 +64,10 @@ namespace Tetris
 
         public bool CanRotateFigure(Figure figure)
         {
-            var angle = Math.PI / 2d;
             for (var i = 1; i < 4; i++)
             {
-                var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(angle) - figure.Blocks[i].Offset.Y * Math.Sin(angle)) + figure.Blocks[0].Position.X;
-                var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(angle) + figure.Blocks[i].Offset.Y * Math.Cos(angle)) + figure.Blocks[0].Position.Y;
+                var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(Figure.RotateAngle) - figure.Blocks[i].Offset.Y * Math.Sin(Figure.RotateAngle)) + figure.Blocks[0].Position.X;
+                var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(Figure.RotateAngle) + figure.Blocks[i].Offset.Y * Math.Cos(Figure.RotateAngle)) + figure.Blocks[0].Position.Y;
                 var fieldPoint = GetFieldPoint(new Point(x, y));
                 if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[fieldPoint.X, fieldPoint.Y] != null)
                     return false;
@@ -94,6 +87,11 @@ namespace Tetris
                 fallingFigure = Tetromino.CreateRandomFigure(new Point(Block.Size * 3, -Block.Size));
                 return;
             }
+            RemoveCompletedFloors();
+        }
+
+        public void RemoveCompletedFloors()
+        {
             foreach (var floorNumber in GetFloorsToRemove())
             {
                 RemoveFloor(floorNumber);
@@ -109,7 +107,7 @@ namespace Tetris
                 for (; x < gameFieldSize.Width; x++)
                     if (gameField[x, y] == null)
                         break;
-                if (x == 10)
+                if (x == gameFieldSize.Width)
                     yield return y;
             }
         }
@@ -131,7 +129,6 @@ namespace Tetris
                         gameField[x, y + 1] = gameField[x, y];
                         gameField[x, y] = null;
                     }
-
         }
 
         public void AddToGameField(Figure figure)
@@ -150,10 +147,7 @@ namespace Tetris
         }
 
         public Point GetFieldPoint(Point point)
-        {
-            var fieldPoint = new Point(point.X / Block.Size, point.Y / Block.Size);
-            return fieldPoint;
-        }
+            => new Point(point.X / Block.Size, point.Y / Block.Size);
 
         public void Draw(Graphics graphics)
         {

@@ -18,7 +18,8 @@ namespace Tetris
             timer.Tick += (s, args) => Invalidate();
             Paint += (s, args) => args.Graphics.Clear(Color.Black);
             Paint += (s, args) => gameModel.Draw(args.Graphics);
-            this.KeyDown += gameModel.KeyDown;
+            KeyDown += gameModel.KeyDown;
+            Load += (sender, args) => gameModel.Start();
             timer.Start();
         } 
     }
