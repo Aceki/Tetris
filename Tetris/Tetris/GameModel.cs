@@ -32,7 +32,7 @@ namespace Tetris
             return true;
         }
 
-        public bool CanMoveFigureTo(Figure figure, Direction direction) //TODO: Фигуры проходят сквозь друг друга.
+        public bool CanMoveFigureTo(Direction direction, Figure figure) //TODO: Фигуры проходят сквозь друг друга.
         {
             var offset = Point.Empty;
             switch(direction)
@@ -61,7 +61,7 @@ namespace Tetris
 
         public void Update()
         {
-            if(CanMoveFigureTo(FallingFigure, Direction.Down))
+            if(CanMoveFigureTo(Direction.Down, FallingFigure))
                 FallingFigure.MoveTo(Direction.Down);
             else
             {
@@ -76,27 +76,27 @@ namespace Tetris
             }
         }
 
-        public void KeyPress(object sender, KeyPressEventArgs args)
+        public void KeyDown(object sender, KeyEventArgs args)
         {
-            switch(args.KeyChar)
+            switch(args.KeyCode)
             {
-                case 'd':
-                    if(CanMoveFigureTo(FallingFigure, Direction.Right))
+                case Keys.D:
+                    if(CanMoveFigureTo(Direction.Right, FallingFigure))
                         FallingFigure.MoveTo(Direction.Right);
                     break;
-                case 'a':
-                    if (CanMoveFigureTo(FallingFigure, Direction.Left))
+                case Keys.A:
+                    if (CanMoveFigureTo(Direction.Left, FallingFigure))
                         FallingFigure.MoveTo(Direction.Left);
                     break;
-                case 'w':
+                case Keys.W:
                     FallingFigure.Rotate();
                     break;
-                case 's':
-                    if (CanMoveFigureTo(FallingFigure, Direction.Down))
+                case Keys.S:
+                    if (CanMoveFigureTo(Direction.Down, FallingFigure))
                         FallingFigure.MoveTo(Direction.Down);
                     break;
-                case ' ':
-                    while (CanMoveFigureTo(FallingFigure, Direction.Down))
+                case Keys.Space:
+                    while (CanMoveFigureTo(Direction.Down, FallingFigure))
                         FallingFigure.MoveTo(Direction.Down);
                     break;
                 default:
