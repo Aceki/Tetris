@@ -80,7 +80,7 @@ namespace Tetris
             if (GameIsOver) 
                 return;
             if (CanMoveFigureTo(Direction.Down, fallingFigure))
-                fallingFigure.MoveTo(Direction.Down);
+                fallingFigure.MoveTo(Direction.Down);    
             else
             {
                 AddToGameField(fallingFigure);
@@ -191,8 +191,8 @@ namespace Tetris
         private void OnGameEnd()
         {
             GameIsOver = true;
-            GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
-            Start();
+            if(GameOver != null)
+                GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
         }
     }
 }
