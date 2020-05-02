@@ -53,10 +53,10 @@ namespace Tetris
             }
             foreach (var block in figure.Blocks)
             {
-                var newBlockFieldPosition = GetFieldPoint(new Point(block.Position.X + offset.X, block.Position.Y + offset.Y));
-                if (!InBounds(newBlockFieldPosition))
+                var fieldPosition = GetFieldPoint(new Point(block.Position.X + offset.X, block.Position.Y + offset.Y));
+                if (!InBounds(fieldPosition))
                     return false;
-                if (newBlockFieldPosition.Y >= 0 && gameField[newBlockFieldPosition.X, newBlockFieldPosition.Y] != null)
+                if (fieldPosition.Y >= 0 && gameField[fieldPosition.X, fieldPosition.Y] != null)
                     return false;
             }
             return true;
