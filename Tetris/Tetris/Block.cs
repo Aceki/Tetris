@@ -62,10 +62,5 @@ namespace Tetris
                     break;
             }
         }
-
-        public void Draw(Graphics graphics)
-        {
-            graphics.FillRectangle(Brush, new Rectangle(Position, new Size(Size, Size)));
-        }
     }
 }

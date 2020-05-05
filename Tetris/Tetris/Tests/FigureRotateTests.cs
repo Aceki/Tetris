@@ -10,7 +10,7 @@ namespace Tetris.Tests
         [Test]
         public void Figure_ShouldNotRotate_WhenNearBorder()
         {
-            var game = new Game(new Size(10, 20));
+            var game = new GameScene(new Size(10, 20));
             var figure = Tetromino.CreateFigure(FigureType.S, new Point(0, 0));
             game.Start();
             Assert.AreEqual(game.CanRotateFigure(figure), false);

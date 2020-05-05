@@ -38,11 +38,5 @@ namespace Tetris
                 Blocks[i].Offset = new Point(x, y);
             }
         }
-
-        public void Draw(Graphics graphics)
-        {
-            foreach (var block in Blocks)
-                block.Draw(graphics);
-        }
     }
 }

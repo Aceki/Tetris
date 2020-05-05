@@ -5,23 +5,28 @@ namespace Tetris
 {
     public partial class MenuForm : Form
     {
-        private Timer timer = new Timer();
-        private Game gameModel;
+        private Timer updateTimer = new Timer();
+        private Timer graphicTimer = new Timer();
+        private GameScene gameScene;
 
         public MenuForm()
         {
             InitializeComponent();
-            gameModel = new Game(new Size(10, 20));
-            gameModel.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
-            gameModel.GameOver += (sender, args) => gameModel.Start();
-            timer.Interval = 200;
-            timer.Tick += (s, args) => gameModel.Update();
-            timer.Tick += (s, args) => Invalidate();
-            Paint += (s, args) => args.Graphics.Clear(Color.Black);
-            Paint += (s, args) => gameModel.Draw(args.Graphics);
-            KeyDown += gameModel.KeyDown;
-            Load += (sender, args) => gameModel.Start();
-            timer.Start();
-        } 
+            gameScene = new GameScene(new Size(10, 20));
+            gameScene.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
+            gameScene.GameOver += (sender, args) => gameScene.Start();
+            updateTimer.Interval = 300;
+            graphicTimer.Interval = 1;
+            updateTimer.Tick += (s, args) => gameScene.Update();
+            graphicTimer.Tick += (s, args) => Invalidate();
+            Paint += (s, args) => gameScene.Draw(args.Graphics);
+            KeyDown += gameScene.KeyDown;
+            Load += (sender, args) => gameScene.Start();
+            updateTimer.Start();
+            graphicTimer.Start();
+        }
+
+        //TODO: Сделать управление независимым от таймера. V
+        //TODO: Выделить отдельную сущность для управления.
     }
 }

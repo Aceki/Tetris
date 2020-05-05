@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Tetris
 {
-    public class Game
+    public class GameScene
     {
         public int Scores { get; set; }
         public bool GameIsOver { get; private set; }
@@ -14,8 +14,9 @@ namespace Tetris
         private Size gameFieldSize;
         private Block[,] gameField;
         private Figure fallingFigure;
+        
 
-        public Game(Size gameFieldSize)
+        public GameScene(Size gameFieldSize)
         {
             this.gameFieldSize = gameFieldSize;
         }
@@ -149,14 +150,6 @@ namespace Tetris
         public Point GetFieldPoint(Point point)
             => new Point(point.X / Block.Size, point.Y / Block.Size);
 
-        public void Draw(Graphics graphics)
-        {
-            fallingFigure.Draw(graphics);
-            foreach (var block in gameField)
-                if (block != null)
-                    block.Draw(graphics);
-        }
-
         #region Control
         public void KeyDown(object sender, KeyEventArgs args)
         {
@@ -187,6 +180,21 @@ namespace Tetris
             }
         }
         #endregion
+
+        public void Draw(Graphics graphics)
+        {
+            graphics.Clear(Color.Black);
+            foreach (var block in fallingFigure.Blocks)
+                DrawBlock(graphics, block, block.Position);
+            foreach (var block in gameField)
+                if (block != null)
+                    DrawBlock(graphics, block, block.Position);
+        }
+
+        public void DrawBlock(Graphics graphics, Block block, Point position)
+        {
+            graphics.FillRectangle(block.Brush, new Rectangle(block.Position, new Size(Block.Size, Block.Size)));
+        }
 
         private void OnGameEnd()
         {

@@ -63,7 +63,7 @@ namespace Tetris
         public void FigureMoveToLeft_ShouldNotLeaveGameField()
         {
             var fieldSize = new Size(10, 20);
-            var game = new Game(fieldSize);
+            var game = new GameScene(fieldSize);
             game.Start();
             var figure = Tetromino.CreateFigure(FigureType.O, new Point(0, 0));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Left, figure), false);
@@ -73,7 +73,7 @@ namespace Tetris
         public void FigureMoveToRight_ShouldNotLeaveGameField()
         {
             var fieldSize = new Size(10, 20);
-            var game = new Game(fieldSize);
+            var game = new GameScene(fieldSize);
             game.Start();
             var figure = Tetromino.CreateFigure(FigureType.O, new Point(Block.Size * 8, 0));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Right, figure), false);
@@ -83,7 +83,7 @@ namespace Tetris
         public void FigureMoveToDown_ShouldNotLeaveGameField()
         {
             var fieldSize = new Size(10, 20);
-            var game = new Game(fieldSize);
+            var game = new GameScene(fieldSize);
             game.Start();
             var figure = Tetromino.CreateFigure(FigureType.O, new Point(0, Block.Size * 18));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Down, figure), false);
