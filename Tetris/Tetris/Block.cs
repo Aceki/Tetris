@@ -65,5 +65,11 @@ namespace Tetris
             }
             Position += moveOffset;
         }
+
+        public void SetTo(Vector position)
+        {
+            if (!HasParent)
+                Position = position;
+        }
     }
 }

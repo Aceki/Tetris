@@ -10,6 +10,7 @@ namespace Tetris
     public class GameModel
     {
         public readonly Size GameFieldSize;
+        public FigureType? HoldedFallingFigureType { get; private set; }
         public FigureType NextFallingFigureType { get; private set; }
         public int LinesScore { get; set; }
         public bool GameOnPause { get; set; }
@@ -30,6 +31,7 @@ namespace Tetris
         {
             GameIsOver = false;
             LinesScore = 0;
+            HoldedFallingFigureType = null;
             gameField = new Block[GameFieldSize.Width, GameFieldSize.Height];
             fallingFigure = Tetromino.CreateRandomFigure(new Vector(2 * Block.Size, -Block.Size));
             NextFallingFigureType = Tetromino.GetRandomType();
@@ -177,6 +179,20 @@ namespace Tetris
                 case Keys.S:
                     if (CanMoveFigureTo(Direction.Down, fallingFigure))
                         fallingFigure.MoveTo(Direction.Down);
+                    break;
+                case Keys.Tab:
+                    if (HoldedFallingFigureType != null)
+                    {
+                        var temp = fallingFigure.Type;
+                        fallingFigure = Tetromino.CreateFigure(HoldedFallingFigureType.Value, new Vector(Block.Size * 3, -Block.Size));
+                        HoldedFallingFigureType = temp;
+                    }
+                    else
+                    {
+                        HoldedFallingFigureType = fallingFigure.Type;
+                        fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector(Block.Size * 3, -Block.Size));
+                        NextFallingFigureType = Tetromino.GetRandomType();
+                    }
                     break;
                 case Keys.Space:
                     while (CanMoveFigureTo(Direction.Down, fallingFigure))

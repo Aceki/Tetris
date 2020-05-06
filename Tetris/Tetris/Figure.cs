@@ -28,6 +28,11 @@ namespace Tetris
         public void MoveTo(Direction direction)
             => rootBlock.MoveTo(direction);
 
+        public void SetTo(Vector position)
+        {
+            rootBlock.SetTo(position);
+        }
+
         public void Rotate()
         {
             if (Type == FigureType.O)
