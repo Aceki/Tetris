@@ -31,31 +31,31 @@ namespace Tetris
             GameIsOver = false;
             LinesScore = 0;
             gameField = new Block[GameFieldSize.Width, GameFieldSize.Height];
-            fallingFigure = Tetromino.CreateRandomFigure(new Vector2(2 * Block.Size, -Block.Size));
+            fallingFigure = Tetromino.CreateRandomFigure(new Vector(2 * Block.Size, -Block.Size));
             NextFallingFigureType = Tetromino.GetRandomType();
         }
 
-        public bool InBounds(Vector2 point)
+        public bool InBounds(Vector point)
         {
             return point.X >= 0 && point.X < GameFieldSize.Width && point.Y < GameFieldSize.Height;
         }
 
         public bool CanMoveFigureTo(Direction direction, Figure figure)
         {
-            var offset = Vector2.Zero;
+            var offset = Vector.Zero;
             switch (direction)
             {
                 case Direction.Left:
-                    offset = new Vector2(-Block.Size, 0);
+                    offset = new Vector(-Block.Size, 0);
                     break;
                 case Direction.Down:
-                    offset = new Vector2(0, Block.Size);
+                    offset = new Vector(0, Block.Size);
                     break;
                 case Direction.Right:
-                    offset = new Vector2(Block.Size, 0);
+                    offset = new Vector(Block.Size, 0);
                     break;
                 case Direction.Up:
-                    offset = new Vector2(0, Block.Size);
+                    offset = new Vector(0, Block.Size);
                     break;
             }
             foreach (var block in figure.Blocks)
@@ -63,7 +63,7 @@ namespace Tetris
                 var fieldPosition = GetOnFieldPoint(block.Position + offset);
                 if (!InBounds(fieldPosition))
                     return false;
-                if (fieldPosition.Y >= 0 && gameField[(int)fieldPosition.X, (int)fieldPosition.Y] != null)
+                if (fieldPosition.Y >= 0 && gameField[fieldPosition.X, fieldPosition.Y] != null)
                     return false;
             }
             return true;
@@ -75,7 +75,7 @@ namespace Tetris
             {
                 var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(Figure.RotateAngle) - figure.Blocks[i].Offset.Y * Math.Sin(Figure.RotateAngle)) + figure.Blocks[0].Position.X;
                 var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(Figure.RotateAngle) + figure.Blocks[i].Offset.Y * Math.Cos(Figure.RotateAngle)) + figure.Blocks[0].Position.Y;
-                var fieldPoint = GetOnFieldPoint(new Vector2(x, y));
+                var fieldPoint = GetOnFieldPoint(new Vector(x, y));
                 if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[(int)fieldPoint.X, (int)fieldPoint.Y] != null)
                     return false;
             }
@@ -91,7 +91,7 @@ namespace Tetris
             else
             {
                 AddToGameField(fallingFigure);
-                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector2(Block.Size * 3, -Block.Size));
+                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector(Block.Size * 3, -Block.Size));
                 NextFallingFigureType = Tetromino.GetRandomType();
                 return;
             }
@@ -154,7 +154,7 @@ namespace Tetris
             }
         }
 
-        public Vector2 GetOnFieldPoint(Vector2 point)
+        public Vector GetOnFieldPoint(Vector point)
             => point / Block.Size;
 
         #region Control

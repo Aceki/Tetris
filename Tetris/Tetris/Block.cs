@@ -7,8 +7,8 @@ namespace Tetris
     {
         public const int Size = 20;
 
-        private Vector2 position;
-        public Vector2 Position
+        private Vector position;
+        public Vector Position
         {
             get
             {
@@ -23,18 +23,18 @@ namespace Tetris
         }
         public Brush Brush { get; private set; }
         public Block Parent { get; set; }
-        public Vector2 Offset { get; set; }
+        public Vector Offset { get; set; }
 
         public bool HasParent
             => Parent != null;
 
-        public Block(Vector2 position, Brush brush)
+        public Block(Vector position, Brush brush)
         {
             Position = position;
             Brush = brush;
         }
 
-        public Block(Block parent, Vector2 offset, Brush brush)
+        public Block(Block parent, Vector offset, Brush brush)
             : this(parent.Position + offset, brush)
         {
             Parent = parent;
@@ -45,20 +45,20 @@ namespace Tetris
         {
             if (HasParent)
                 return;
-            var moveOffset = Vector2.Zero;
+            var moveOffset = Vector.Zero;
             switch (direction)
             {
                 case Direction.Right:
-                    moveOffset = new Vector2(Block.Size, 0);
+                    moveOffset = new Vector(Block.Size, 0);
                     break;
                 case Direction.Left:
-                    moveOffset = new Vector2(-Block.Size, 0);
+                    moveOffset = new Vector(-Block.Size, 0);
                     break;
                 case Direction.Down:
-                    moveOffset = new Vector2(0, Block.Size);
+                    moveOffset = new Vector(0, Block.Size);
                     break;
                 case Direction.Up:
-                    moveOffset = new Vector2(0, -Block.Size);
+                    moveOffset = new Vector(0, -Block.Size);
                     break;
                 default:
                     break;

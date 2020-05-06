@@ -11,7 +11,7 @@ namespace Tetris
         public const double RotateAngle = Math.PI / 2;
         public readonly FigureType Type;
 
-        public Vector2 Position
+        public Vector Position
             => Blocks[0].Position;
 
         public Block[] Blocks;
@@ -36,7 +36,7 @@ namespace Tetris
             {
                 var x = (int)(Blocks[i].Offset.X * Math.Cos(RotateAngle) - Blocks[i].Offset.Y * Math.Sin(RotateAngle));
                 var y = (int)(Blocks[i].Offset.X * Math.Sin(RotateAngle) + Blocks[i].Offset.Y * Math.Cos(RotateAngle));
-                Blocks[i].Offset = new Vector2(x, y);
+                Blocks[i].Offset = new Vector(x, y);
             }
         }
     }

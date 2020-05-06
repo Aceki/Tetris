@@ -90,6 +90,7 @@
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\TetrominoTests.cs" />
     <Compile Include="Tetromino.cs" />
+    <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

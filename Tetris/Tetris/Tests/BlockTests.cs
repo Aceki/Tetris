@@ -10,8 +10,8 @@ namespace Tetris.Tests
         [Test]
         public void BlockWithParent_ReturnsCorrectPosition()
         {
-            var parentBlock = new Block(new Vector2(1, 2), Brushes.White);
-            var childBlock = new Block(parentBlock, new Vector2(1, 1), Brushes.White);
+            var parentBlock = new Block(new Vector(1, 2), Brushes.White);
+            var childBlock = new Block(parentBlock, new Vector(1, 1), Brushes.White);
             Assert.AreEqual(childBlock.Position.X, 2);
             Assert.AreEqual(childBlock.Position.Y, 3);
         }

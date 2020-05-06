@@ -11,7 +11,7 @@ namespace Tetris.Tests
         public void GameOver_WhenPlaceBlockOnTop()
         {
             var game = new GameModel(new Size(10,20));
-            var figure = Tetromino.CreateFigure(FigureType.O, new Vector2(0, -Block.Size * 2));
+            var figure = Tetromino.CreateFigure(FigureType.O, new Vector(0, -Block.Size * 2));
             game.Start();
             game.AddToGameField(figure);
             Assert.AreEqual(game.GameIsOver, true);

@@ -13,7 +13,7 @@ namespace Tetris.Tests
             for(var i = 0; i < 7; i++)
             {
                 var figureType = (FigureType)i;
-                var figure = Tetromino.CreateFigure(figureType, new Vector2(0, 0));
+                var figure = Tetromino.CreateFigure(figureType, new Vector(0, 0));
                 Assert.AreEqual(figure.Type, figureType);
             }
         }
