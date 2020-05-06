@@ -1,63 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Numerics;
 
 namespace Tetris
 {
-    public class GameScene
+    public class GameModel
     {
-        public int Scores { get; set; }
+        public readonly Size GameFieldSize;
+        public FigureType NextFallingFigureType { get; private set; }
+        public int LinesScore { get; set; }
+        public bool GameOnPause { get; set; }
         public bool GameIsOver { get; private set; }
         public event GameOverEventHandler GameOver;
-
-        private Size gameFieldSize;
-        private Block[,] gameField;
-        private Figure fallingFigure;
+        public event EventHandler Exit;
         
+        private Block[,] gameField;
+        
+        private Figure fallingFigure;
 
-        public GameScene(Size gameFieldSize)
+        public GameModel(Size gameFieldSize)
         {
-            this.gameFieldSize = gameFieldSize;
+            this.GameFieldSize = gameFieldSize;
         }
 
         public void Start()
         {
             GameIsOver = false;
-            Scores = 0;
-            gameField = new Block[gameFieldSize.Width, gameFieldSize.Height];
-            fallingFigure = Tetromino.CreateRandomFigure(new Point(2 * Block.Size, -Block.Size));
+            LinesScore = 0;
+            gameField = new Block[GameFieldSize.Width, GameFieldSize.Height];
+            fallingFigure = Tetromino.CreateRandomFigure(new Vector2(2 * Block.Size, -Block.Size));
+            NextFallingFigureType = Tetromino.GetRandomType();
         }
 
-        public bool InBounds(Point point)
+        public bool InBounds(Vector2 point)
         {
-            return point.X >= 0 && point.X < gameFieldSize.Width && point.Y < gameFieldSize.Height;
+            return point.X >= 0 && point.X < GameFieldSize.Width && point.Y < GameFieldSize.Height;
         }
 
         public bool CanMoveFigureTo(Direction direction, Figure figure)
         {
-            var offset = Point.Empty;
+            var offset = Vector2.Zero;
             switch (direction)
             {
                 case Direction.Left:
-                    offset = new Point(-Block.Size, 0);
+                    offset = new Vector2(-Block.Size, 0);
                     break;
                 case Direction.Down:
-                    offset = new Point(0, Block.Size);
+                    offset = new Vector2(0, Block.Size);
                     break;
                 case Direction.Right:
-                    offset = new Point(Block.Size, 0);
+                    offset = new Vector2(Block.Size, 0);
                     break;
                 case Direction.Up:
-                    offset = new Point(0, Block.Size);
+                    offset = new Vector2(0, Block.Size);
                     break;
             }
             foreach (var block in figure.Blocks)
             {
-                var fieldPosition = GetFieldPoint(new Point(block.Position.X + offset.X, block.Position.Y + offset.Y));
+                var fieldPosition = GetOnFieldPoint(block.Position + offset);
                 if (!InBounds(fieldPosition))
                     return false;
-                if (fieldPosition.Y >= 0 && gameField[fieldPosition.X, fieldPosition.Y] != null)
+                if (fieldPosition.Y >= 0 && gameField[(int)fieldPosition.X, (int)fieldPosition.Y] != null)
                     return false;
             }
             return true;
@@ -69,8 +75,8 @@ namespace Tetris
             {
                 var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(Figure.RotateAngle) - figure.Blocks[i].Offset.Y * Math.Sin(Figure.RotateAngle)) + figure.Blocks[0].Position.X;
                 var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(Figure.RotateAngle) + figure.Blocks[i].Offset.Y * Math.Cos(Figure.RotateAngle)) + figure.Blocks[0].Position.Y;
-                var fieldPoint = GetFieldPoint(new Point(x, y));
-                if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[fieldPoint.X, fieldPoint.Y] != null)
+                var fieldPoint = GetOnFieldPoint(new Vector2(x, y));
+                if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[(int)fieldPoint.X, (int)fieldPoint.Y] != null)
                     return false;
             }
             return true;
@@ -78,14 +84,15 @@ namespace Tetris
 
         public void Update()
         {
-            if (GameIsOver) 
+            if (GameIsOver || GameOnPause)
                 return;
             if (CanMoveFigureTo(Direction.Down, fallingFigure))
-                fallingFigure.MoveTo(Direction.Down);    
+                fallingFigure.MoveTo(Direction.Down);
             else
             {
                 AddToGameField(fallingFigure);
-                fallingFigure = Tetromino.CreateRandomFigure(new Point(Block.Size * 3, -Block.Size));
+                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector2(Block.Size * 3, -Block.Size));
+                NextFallingFigureType = Tetromino.GetRandomType();
                 return;
             }
             RemoveCompletedFloors();
@@ -102,28 +109,28 @@ namespace Tetris
 
         public IEnumerable<int> GetFloorsToRemove()
         {
-            for (var y = gameFieldSize.Height - 1; y >= 0; y--)
+            for (var y = GameFieldSize.Height - 1; y >= 0; y--)
             {
                 var x = 0;
-                for (; x < gameFieldSize.Width; x++)
+                for (; x < GameFieldSize.Width; x++)
                     if (gameField[x, y] == null)
                         break;
-                if (x == gameFieldSize.Width)
+                if (x == GameFieldSize.Width)
                     yield return y;
             }
         }
 
         public void RemoveFloor(int floorNumber)
         {
-            Scores++;
-            for (var x = 0; x < gameFieldSize.Width; x++)
+            LinesScore++;
+            for (var x = 0; x < GameFieldSize.Width; x++)
                 gameField[x, floorNumber] = null;
         }
 
         public void LowerBlocks(int floorNumber)
         {
             for (var y = floorNumber; y >= 0; y--)
-                for (var x = 0; x < gameFieldSize.Width; x++)
+                for (var x = 0; x < GameFieldSize.Width; x++)
                     if (gameField[x, y] != null)
                     {
                         gameField[x, y].MoveTo(Direction.Down);
@@ -136,19 +143,19 @@ namespace Tetris
         {
             foreach (var block in figure.Blocks)
             {
-                var fieldPoint = GetFieldPoint(block.Position);
-                if(fieldPoint.Y < 0)
+                var fieldPoint = GetOnFieldPoint(block.Position);
+                if (fieldPoint.Y < 0)
                 {
                     OnGameEnd();
                     break;
                 }
                 block.Parent = null;
-                gameField[fieldPoint.X, fieldPoint.Y] = block;
+                gameField[(int)fieldPoint.X, (int)fieldPoint.Y] = block;
             }
         }
 
-        public Point GetFieldPoint(Point point)
-            => new Point(point.X / Block.Size, point.Y / Block.Size);
+        public Vector2 GetOnFieldPoint(Vector2 point)
+            => point / Block.Size;
 
         #region Control
         public void KeyDown(object sender, KeyEventArgs args)
@@ -175,25 +182,22 @@ namespace Tetris
                     while (CanMoveFigureTo(Direction.Down, fallingFigure))
                         fallingFigure.MoveTo(Direction.Down);
                     break;
+                case Keys.Escape:
+                    OnExit();
+                    break;
                 default:
                     break;
             }
         }
         #endregion
 
-        public void Draw(Graphics graphics)
+        public IEnumerable<Block> GetBlocksFromField()
         {
-            graphics.Clear(Color.Black);
             foreach (var block in fallingFigure.Blocks)
-                DrawBlock(graphics, block, block.Position);
+                yield return block;
             foreach (var block in gameField)
                 if (block != null)
-                    DrawBlock(graphics, block, block.Position);
-        }
-
-        public void DrawBlock(Graphics graphics, Block block, Point position)
-        {
-            graphics.FillRectangle(block.Brush, new Rectangle(block.Position, new Size(Block.Size, Block.Size)));
+                    yield return block;
         }
 
         private void OnGameEnd()
@@ -201,6 +205,14 @@ namespace Tetris
             GameIsOver = true;
             if(GameOver != null)
                 GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
+        }
+
+        private void OnExit()
+        {
+            GameOnPause = true;
+            if (Exit != null)
+                Exit.Invoke(this, new EventArgs());
+            GameOnPause = false;
         }
     }
 }

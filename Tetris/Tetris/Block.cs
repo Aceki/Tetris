@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 
 namespace Tetris
 {
@@ -6,13 +7,13 @@ namespace Tetris
     {
         public const int Size = 20;
 
-        private Point position;
-        public Point Position
+        private Vector2 position;
+        public Vector2 Position
         {
             get
             {
                 if (HasParent)
-                    position = new Point(Parent.Position.X + Offset.X, Parent.Position.Y + Offset.Y);
+                    position = Parent.Position + Offset;
                 return position;
             }
             private set
@@ -22,19 +23,19 @@ namespace Tetris
         }
         public Brush Brush { get; private set; }
         public Block Parent { get; set; }
-        public Point Offset { get; set; }
+        public Vector2 Offset { get; set; }
 
         public bool HasParent
             => Parent != null;
 
-        public Block(Point position, Brush brush)
+        public Block(Vector2 position, Brush brush)
         {
             Position = position;
             Brush = brush;
         }
 
-        public Block(Block parent, Point offset, Brush brush)
-            : this(new Point(parent.Position.X + offset.X, parent.Position.Y + offset.Y), brush)
+        public Block(Block parent, Vector2 offset, Brush brush)
+            : this(parent.Position + offset, brush)
         {
             Parent = parent;
             this.Offset = offset;
@@ -44,23 +45,25 @@ namespace Tetris
         {
             if (HasParent)
                 return;
+            var moveOffset = Vector2.Zero;
             switch (direction)
             {
                 case Direction.Right:
-                    Position = new Point(Position.X + Block.Size, Position.Y);
+                    moveOffset = new Vector2(Block.Size, 0);
                     break;
                 case Direction.Left:
-                    Position = new Point(Position.X - Block.Size, Position.Y);
+                    moveOffset = new Vector2(-Block.Size, 0);
                     break;
                 case Direction.Down:
-                    Position = new Point(Position.X, Position.Y + Block.Size);
+                    moveOffset = new Vector2(0, Block.Size);
                     break;
                 case Direction.Up:
-                    Position = new Point(Position.X, Position.Y - Block.Size);
+                    moveOffset = new Vector2(0, -Block.Size);
                     break;
                 default:
                     break;
             }
+            Position += moveOffset;
         }
     }
 }

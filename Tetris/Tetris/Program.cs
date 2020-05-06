@@ -11,6 +11,9 @@ namespace Tetris
         {
             var form = new MenuForm();
             Application.Run(form);
+            //TODO: Заняться рефакторингом.
+            //TODO: Создать собственный класс для вектора.
+            //TODO: Доработать дизайн, добавить меню.
         }
     }
 }

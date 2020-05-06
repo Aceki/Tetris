@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -58,17 +59,24 @@
     <Compile Include="Block.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Figure.cs" />
-    <Compile Include="Tests\BlockTests.cs" />
-    <Compile Include="Tests\FigureMoveTests.cs" />
-    <Compile Include="FigureType.cs" />
-    <Compile Include="GameEndEventArgs.cs" />
-    <Compile Include="GameOverEventHandler.cs" />
-    <Compile Include="GameScene.cs" />
+    <Compile Include="GameModelDrawer.cs" />
     <Compile Include="MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MenuForm.Designer.cs">
       <DependentUpon>MenuForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\BlockTests.cs" />
+    <Compile Include="Tests\FigureMoveTests.cs" />
+    <Compile Include="FigureType.cs" />
+    <Compile Include="GameEndEventArgs.cs" />
+    <Compile Include="GameOverEventHandler.cs" />
+    <Compile Include="GameModel.cs" />
+    <Compile Include="GameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GameForm.Designer.cs">
+      <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,6 +96,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GameForm.resx">
+      <DependentUpon>GameForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MenuForm.resx">
       <DependentUpon>MenuForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -97,7 +108,21 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\tetris_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\background1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backgrosund.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backgrosund1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

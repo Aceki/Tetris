@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Numerics;
 using System.Drawing;
 
 namespace Tetris.Tests
@@ -11,7 +12,7 @@ namespace Tetris.Tests
         {
             for(var i = 0; i < 7; i++)
             {
-                var figure = Tetromino.CreateFigure((FigureType)i, Point.Empty);
+                var figure = Tetromino.CreateFigure((FigureType)i, new Vector2(0, 0));
                 for (var j = 1; j < figure.Blocks.Length; j++)
                 {
                     Assert.AreEqual(figure.Blocks[j].HasParent, true);
@@ -24,7 +25,7 @@ namespace Tetris.Tests
         {
             for (var i = 0; i < 7; i++)
             {
-                var figure = Tetromino.CreateFigure((FigureType)i, Point.Empty);
+                var figure = Tetromino.CreateFigure((FigureType)i, new Vector2(0, 0));
                 Assert.AreEqual(figure.Blocks[0].HasParent, false);
             }
         }

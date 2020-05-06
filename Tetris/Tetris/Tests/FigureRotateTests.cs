@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using System.Numerics;
 using System.Drawing;
 using System.Linq;
 
@@ -10,8 +11,8 @@ namespace Tetris.Tests
         [Test]
         public void Figure_ShouldNotRotate_WhenNearBorder()
         {
-            var game = new GameScene(new Size(10, 20));
-            var figure = Tetromino.CreateFigure(FigureType.S, new Point(0, 0));
+            var game = new GameModel(new Size(10, 20));
+            var figure = Tetromino.CreateFigure(FigureType.S, new Vector2(0, 0));
             game.Start();
             Assert.AreEqual(game.CanRotateFigure(figure), false);
         }
@@ -19,7 +20,7 @@ namespace Tetris.Tests
         [Test]
         public void FigureTypeO_ShouldNotRotate()
         {
-            var figure = Tetromino.CreateFigure(FigureType.O, new Point(Block.Size * 2, Block.Size * 2));
+            var figure = Tetromino.CreateFigure(FigureType.O, new Vector2(Block.Size * 2, Block.Size * 2));
             var startBlocksPositions = figure.Blocks.Select(b => b.Position).ToArray();
             figure.Rotate();
             for(var i = 0; i < figure.Blocks.Length; i++)

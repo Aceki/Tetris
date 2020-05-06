@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using System.Linq;
+using System.Numerics;
 
 namespace Tetris
 {
@@ -10,7 +11,7 @@ namespace Tetris
         public const double RotateAngle = Math.PI / 2;
         public readonly FigureType Type;
 
-        public Point Position
+        public Vector2 Position
             => Blocks[0].Position;
 
         public Block[] Blocks;
@@ -35,7 +36,7 @@ namespace Tetris
             {
                 var x = (int)(Blocks[i].Offset.X * Math.Cos(RotateAngle) - Blocks[i].Offset.Y * Math.Sin(RotateAngle));
                 var y = (int)(Blocks[i].Offset.X * Math.Sin(RotateAngle) + Blocks[i].Offset.Y * Math.Cos(RotateAngle));
-                Blocks[i].Offset = new Point(x, y);
+                Blocks[i].Offset = new Vector2(x, y);
             }
         }
     }

@@ -15,7 +15,6 @@ C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.csproj.Gen
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.csproj.CoreCompileInputs.cache
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.exe
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.pdb
-C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.MenuForm.resources
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.Properties.Resources.resources
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\bin\Debug\NUnit3.TestAdapter.dll
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\bin\Debug\NUnit3.TestAdapter.pdb
@@ -25,3 +24,5 @@ C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\bin\Debug\nunit.framework.d
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\bin\Debug\nunit.framework.pdb
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\bin\Debug\nunit.framework.xml
 C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.csproj.CopyComplete
+C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.GameForm.resources
+C:\Users\aceki\Desktop\Projects\Tetris\Tetris\Tetris\obj\Debug\Tetris.MenuForm.resources
