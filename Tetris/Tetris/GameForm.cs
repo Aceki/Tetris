@@ -9,6 +9,7 @@ namespace Tetris
     {
         public GameModel Model { get; private set; }
         public GameModelDrawer Drawer { get; private set; }
+        public GameModelSounds Sounds { get; private set; }
         public SoundPlayer MusicPlayer { get; private set; }
 
         public GameForm()
@@ -17,16 +18,12 @@ namespace Tetris
             MusicPlayer = new SoundPlayer(@"ambient.wav");
             Model = new GameModel(new Size(10, 20));
             Drawer = new GameModelDrawer(Model);
+            Sounds = new GameModelSounds(Model);
+            Sounds.Connect();
             var updateTimer = new Timer();
             var graphicTimer = new Timer();
-            Model.GameOver += (sender, args) =>
-            {
-                var p = new SoundPlayer(@"gameover.wav");
-                p.Play();
-            };
             Model.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
             Model.GameOver += (sender, args) => Model.StartGame();
-            Model.Start += (sender, args) => MusicPlayer.PlayLooping();
             Model.Exit += (sender, args) =>
             {
                 var result = ShowExitMessage();

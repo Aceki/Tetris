@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Numerics;
-using NUnit.Framework.Internal.Execution;
 
 namespace Tetris
 {
@@ -26,6 +23,8 @@ namespace Tetris
         private Block[,] gameField;
         private Figure fallingFigure;
 
+        private bool holdButtonAlredyUse;
+
         public GameModel(Size gameFieldSize)
         {
             this.GameFieldSize = gameFieldSize;
@@ -33,6 +32,7 @@ namespace Tetris
 
         public void StartGame()
         {
+            holdButtonAlredyUse = false;
             GameIsOver = false;
             LinesScore = 0;
             HoldedFallingFigureType = null;
@@ -100,6 +100,7 @@ namespace Tetris
                 AddToGameField(fallingFigure);
                 fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
                 NextFallingFigureType = Tetromino.GetRandomType();
+                holdButtonAlredyUse = false;
                 OnFigureLanding();
             }
             RemoveCompletedFloors();
@@ -187,17 +188,21 @@ namespace Tetris
                         fallingFigure.MoveTo(Direction.Down);
                     break;
                 case Keys.Tab:
-                    if (HoldedFallingFigureType != null)
+                    if (!holdButtonAlredyUse)
                     {
-                        var temp = fallingFigure.Type;
-                        fallingFigure = Tetromino.CreateFigure(HoldedFallingFigureType.Value, new Vector(Block.Size * 3, -Block.Size));
-                        HoldedFallingFigureType = temp;
-                    }
-                    else
-                    {
-                        HoldedFallingFigureType = fallingFigure.Type;
-                        fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector(Block.Size * 3, -Block.Size));
+                        if (HoldedFallingFigureType != null)
+                        {
+                            var temp = fallingFigure.Type;
+                            fallingFigure = Tetromino.CreateFigure(HoldedFallingFigureType.Value, FallingFigureSpawnPosition);
+                            HoldedFallingFigureType = temp;
+                        }
+                        else
+                        {
+                            HoldedFallingFigureType = fallingFigure.Type;
+                            fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
+                        }
                         NextFallingFigureType = Tetromino.GetRandomType();
+                        holdButtonAlredyUse = true;
                     }
                     break;
                 case Keys.Space:

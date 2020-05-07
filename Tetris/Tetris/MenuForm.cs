@@ -20,7 +20,7 @@ namespace Tetris
         private void playButton_Click(object sender, EventArgs e)
         {
             var gameForm = new GameForm();
-            gameForm.Model.Exit += (s, args) => this.Show();
+
             gameForm.FormClosed += (s, args) => this.Show();
             this.Hide();
             gameForm.Show();

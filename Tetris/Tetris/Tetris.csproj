@@ -63,6 +63,7 @@
     <Compile Include="Figure.cs" />
     <Compile Include="FloorRemoveEventHandler.cs" />
     <Compile Include="GameModelDrawer.cs" />
+    <Compile Include="GameModelSounds.cs" />
     <Compile Include="MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
