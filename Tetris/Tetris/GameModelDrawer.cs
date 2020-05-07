@@ -12,9 +12,9 @@ namespace Tetris
     public class GameModelDrawer
     {
         public readonly Color GridColor;
-        public GameModel Scene { get; set; }
         public readonly Vector PlayAreaPosition;
-
+        public GameModel Scene { get; set; }
+        
         public GameModelDrawer(GameModel scene)
         {
             PlayAreaPosition = new Vector(195, 0);

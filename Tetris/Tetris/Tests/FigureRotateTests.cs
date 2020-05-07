@@ -13,7 +13,7 @@ namespace Tetris.Tests
         {
             var game = new GameModel(new Size(10, 20));
             var figure = Tetromino.CreateFigure(FigureType.S, new Vector(0, 0));
-            game.Start();
+            game.StartGame();
             Assert.AreEqual(game.CanRotateFigure(figure), false);
         }
 

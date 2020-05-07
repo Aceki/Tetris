@@ -4,11 +4,13 @@ using System.Windows;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Numerics;
+using NUnit.Framework.Internal.Execution;
 
 namespace Tetris
 {
     public class GameModel
     {
+        public readonly Vector FallingFigureSpawnPosition = new Vector(Block.Size * 3, -Block.Size);
         public readonly Size GameFieldSize;
         public FigureType? HoldedFallingFigureType { get; private set; }
         public FigureType NextFallingFigureType { get; private set; }
@@ -16,10 +18,12 @@ namespace Tetris
         public bool GameOnPause { get; set; }
         public bool GameIsOver { get; private set; }
         public event GameOverEventHandler GameOver;
+        public event FloorRemovedEventHandler FloorRemoved;
+        public event EventHandler Start;
         public event EventHandler Exit;
-        
+        public event EventHandler FigureLanded;
+
         private Block[,] gameField;
-        
         private Figure fallingFigure;
 
         public GameModel(Size gameFieldSize)
@@ -27,14 +31,15 @@ namespace Tetris
             this.GameFieldSize = gameFieldSize;
         }
 
-        public void Start()
+        public void StartGame()
         {
             GameIsOver = false;
             LinesScore = 0;
             HoldedFallingFigureType = null;
             gameField = new Block[GameFieldSize.Width, GameFieldSize.Height];
-            fallingFigure = Tetromino.CreateRandomFigure(new Vector(2 * Block.Size, -Block.Size));
+            fallingFigure = Tetromino.CreateRandomFigure(FallingFigureSpawnPosition);
             NextFallingFigureType = Tetromino.GetRandomType();
+            OnGameStart();
         }
 
         public bool InBounds(Vector point)
@@ -78,7 +83,7 @@ namespace Tetris
                 var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(Figure.RotateAngle) - figure.Blocks[i].Offset.Y * Math.Sin(Figure.RotateAngle)) + figure.Blocks[0].Position.X;
                 var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(Figure.RotateAngle) + figure.Blocks[i].Offset.Y * Math.Cos(Figure.RotateAngle)) + figure.Blocks[0].Position.Y;
                 var fieldPoint = GetOnFieldPoint(new Vector(x, y));
-                if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[(int)fieldPoint.X, (int)fieldPoint.Y] != null)
+                if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[fieldPoint.X, fieldPoint.Y] != null)
                     return false;
             }
             return true;
@@ -93,9 +98,9 @@ namespace Tetris
             else
             {
                 AddToGameField(fallingFigure);
-                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, new Vector(Block.Size * 3, -Block.Size));
+                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
                 NextFallingFigureType = Tetromino.GetRandomType();
-                return;
+                OnFigureLanding();
             }
             RemoveCompletedFloors();
         }
@@ -124,9 +129,10 @@ namespace Tetris
 
         public void RemoveFloor(int floorNumber)
         {
-            LinesScore++;
+            IncreaseLinesScore();
             for (var x = 0; x < GameFieldSize.Width; x++)
                 gameField[x, floorNumber] = null;
+            OnFloorRemoved(floorNumber);
         }
 
         public void LowerBlocks(int floorNumber)
@@ -148,11 +154,11 @@ namespace Tetris
                 var fieldPoint = GetOnFieldPoint(block.Position);
                 if (fieldPoint.Y < 0)
                 {
-                    OnGameEnd();
+                    OnGameOver();
                     break;
                 }
                 block.Parent = null;
-                gameField[(int)fieldPoint.X, (int)fieldPoint.Y] = block;
+                gameField[fieldPoint.X, fieldPoint.Y] = block;
             }
         }
 
@@ -216,11 +222,22 @@ namespace Tetris
                     yield return block;
         }
 
-        private void OnGameEnd()
+        private void IncreaseLinesScore()
+        {
+            LinesScore++;
+        }
+
+        private void OnGameOver()
         {
             GameIsOver = true;
-            if(GameOver != null)
+            if (GameOver != null)
                 GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
+        }
+
+        private void OnGameStart()
+        {
+            if (Start != null)
+                Start.Invoke(this, new EventArgs());
         }
 
         private void OnExit()
@@ -229,6 +246,18 @@ namespace Tetris
             if (Exit != null)
                 Exit.Invoke(this, new EventArgs());
             GameOnPause = false;
+        }
+
+        private void OnFigureLanding()
+        {
+            if (FigureLanded != null)
+                FigureLanded.Invoke(this, new EventArgs());
+        }
+
+        private void OnFloorRemoved(int floorNumber)
+        {
+            if (FloorRemoved != null)
+                FloorRemoved.Invoke(this, new FloorRemovedEventArgs(floorNumber));
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Tetris
         {
             var fieldSize = new Size(10, 20);
             var game = new GameModel(fieldSize);
-            game.Start();
+            game.StartGame();
             var figure = Tetromino.CreateFigure(FigureType.O, new Vector(0, 0));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Left, figure), false);
         }
@@ -75,7 +75,7 @@ namespace Tetris
         {
             var fieldSize = new Size(10, 20);
             var game = new GameModel(fieldSize);
-            game.Start();
+            game.StartGame();
             var figure = Tetromino.CreateFigure(FigureType.O, new Vector(Block.Size * 8, 0));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Right, figure), false);
         }
@@ -85,7 +85,7 @@ namespace Tetris
         {
             var fieldSize = new Size(10, 20);
             var game = new GameModel(fieldSize);
-            game.Start();
+            game.StartGame();
             var figure = Tetromino.CreateFigure(FigureType.O, new Vector(0, Block.Size * 18));
             Assert.AreEqual(game.CanMoveFigureTo(Direction.Down, figure), false);
         }
