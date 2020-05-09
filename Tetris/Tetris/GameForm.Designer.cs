@@ -25,17 +25,23 @@ namespace Tetris
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            //this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(Block.Size * 30, Block.Size * 20);
+            this.SuspendLayout();
+            // 
+            // GameForm
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackgroundImage = global::Tetris.Properties.Resources.game_background;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(600, 400);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.Name = "GameForm";
             this.Text = "Tetris";
-            this.Name = "Tetris";
             this.ResumeLayout(false);
+
         }
 
         #endregion

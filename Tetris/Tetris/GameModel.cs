@@ -98,9 +98,6 @@ namespace Tetris
             else
             {
                 AddToGameField(fallingFigure);
-                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
-                NextFallingFigureType = Tetromino.GetRandomType();
-                holdButtonAlredyUse = false;
                 OnFigureLanding();
             }
             RemoveCompletedFloors();
@@ -166,10 +163,9 @@ namespace Tetris
         public Vector GetOnFieldPoint(Vector point)
             => point / Block.Size;
 
-        #region Control
-        public void KeyDown(object sender, KeyEventArgs args)
+        public void KeyDown(Keys key)
         {
-            switch (args.KeyCode)
+            switch (key)
             {
                 case Keys.D:
                     if (CanMoveFigureTo(Direction.Right, fallingFigure))
@@ -216,7 +212,6 @@ namespace Tetris
                     break;
             }
         }
-        #endregion
 
         public IEnumerable<Block> GetBlocksFromField()
         {
@@ -255,6 +250,9 @@ namespace Tetris
 
         private void OnFigureLanding()
         {
+            fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
+            NextFallingFigureType = Tetromino.GetRandomType();
+            holdButtonAlredyUse = false;
             if (FigureLanded != null)
                 FigureLanded.Invoke(this, new EventArgs());
         }

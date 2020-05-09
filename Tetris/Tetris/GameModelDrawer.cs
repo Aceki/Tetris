@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NUnit.Framework.Constraints;
 
 namespace Tetris
 {
@@ -13,20 +14,22 @@ namespace Tetris
     {
         public readonly Color GridColor;
         public readonly Vector PlayAreaPosition;
+        public readonly Color FieldsBackGroundColor;
         public GameModel Model { get; set; }
         
         public GameModelDrawer(GameModel scene)
         {
-            PlayAreaPosition = new Vector(195, 0);
+            PlayAreaPosition = new Vector(200, 0);
+            FieldsBackGroundColor = Color.FromArgb(230, 0, 0, 0);
             GridColor = Color.FromArgb(0x30af19ff);
             Model = scene;
         }
 
         public void Draw(object sender, PaintEventArgs args)
         {
+            
             var graphics = args.Graphics;
-            graphics.Clear(Color.Black);
-            DrawGrid(graphics, Model.GameFieldSize.Width, Model.GameFieldSize.Height, PlayAreaPosition);
+            DrawPlayArea(graphics, Model.GameFieldSize.Width, Model.GameFieldSize.Height, PlayAreaPosition);
             DrawGameFieldBounds(graphics, PlayAreaPosition);
             DrawNextFigureContainer(graphics, PlayAreaPosition + new Vector(Block.Size * 12, Block.Size * 3));
             DrawHoldFigureContainer(graphics, PlayAreaPosition + new Vector(Block.Size * 12, Block.Size * 11));
@@ -34,8 +37,9 @@ namespace Tetris
             DrawBlocks(graphics, Model.GetBlocksFromField(), PlayAreaPosition);
         }
 
-        public void DrawGrid(Graphics graphics, int verticalCount, int horizontalCount, Vector position)
+        public void DrawPlayArea(Graphics graphics, int verticalCount, int horizontalCount, Vector position)
         {
+            graphics.FillRectangle(new SolidBrush(FieldsBackGroundColor), new Rectangle(position, new Size(Model.GameFieldSize.Width * Block.Size, Model.GameFieldSize.Height * Block.Size))); ;
             for (var i = 0; i < verticalCount; i++)
                 graphics.DrawLine(new Pen(GridColor), position + new Vector(Block.Size * i, 0), position + new Vector(Block.Size * i, Block.Size * horizontalCount));
             for (var i = 0; i < horizontalCount; i++)
@@ -52,6 +56,7 @@ namespace Tetris
         {
             var nextFigureRect = new Rectangle((Point)position, new Size(Block.Size * 5, Block.Size * 5));
             graphics.DrawString("NEXT", new Font(FontFamily.GenericMonospace, 30), Brushes.White, (Point)new Vector(nextFigureRect.X - 4, nextFigureRect.Y - Block.Size * 2));
+            graphics.FillRectangle(new SolidBrush(FieldsBackGroundColor), nextFigureRect);
             graphics.DrawRectangle(Pens.White, nextFigureRect);
             foreach (var block in Tetromino.CreateFigure(Model.NextFallingFigureType, new Vector(nextFigureRect.X + Block.Size * 2, nextFigureRect.Y + Block.Size * 2)).Blocks)
                 DrawBlock(graphics, Brushes.Aqua, new Vector(block.Position.X, block.Position.Y), new Size(Block.Size, Block.Size));
@@ -61,6 +66,7 @@ namespace Tetris
         {
             var holdFigureRect = new Rectangle((Point)position, new Size(Block.Size * 5, Block.Size * 5));
             graphics.DrawString("HOLD", new Font(FontFamily.GenericMonospace, 30), Brushes.White, (Point)new Vector(holdFigureRect.X - 4, holdFigureRect.Y - Block.Size * 2));
+            graphics.FillRectangle(new SolidBrush(FieldsBackGroundColor), holdFigureRect);
             graphics.DrawRectangle(Pens.White, holdFigureRect);
             if(Model.HoldedFallingFigureType != null)
                 foreach (var block in Tetromino.CreateFigure(Model.HoldedFallingFigureType.Value, new Vector(holdFigureRect.X + Block.Size * 2, holdFigureRect.Y + Block.Size * 2)).Blocks)

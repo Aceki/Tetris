@@ -20,13 +20,6 @@ namespace Tetris
         {
             Model = model;
             Player = new SoundPlayer();
-        }
-
-        /// <summary>
-        /// Выполняет привязку звуков к событиям.
-        /// </summary>
-        public void Connect()
-        {
             Model.Start += (sender, args) =>
             {
                 Player.SoundLocation = ambientLocation;
