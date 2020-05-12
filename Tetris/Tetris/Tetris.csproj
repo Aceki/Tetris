@@ -91,7 +91,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Tests\FigureRotateTests.cs" />
-    <Compile Include="Tests\FigureTests.cs" />
     <Compile Include="Tests\GameTests.cs" />
     <Compile Include="Tests\TetrominoTests.cs" />
     <Compile Include="Tetromino.cs" />

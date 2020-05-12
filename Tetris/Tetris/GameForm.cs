@@ -19,6 +19,8 @@ namespace Tetris
             Controller = new GameModelController(Model);
             var updateTimer = new Timer();
             var graphicTimer = new Timer();
+            updateTimer.Interval = 300;
+            graphicTimer.Interval = 1;
             Model.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
             Model.GameOver += (sender, args) => Model.StartGame();
             Model.Exit += (sender, args) =>
@@ -37,15 +39,9 @@ namespace Tetris
                 graphicTimer.Dispose();
                 Sounds.Player.Stop();
             };
-            updateTimer.Interval = 300;
-            graphicTimer.Interval = 1;
             updateTimer.Tick += (s, args) => Model.Update();
             graphicTimer.Tick += (s, args) => Invalidate();
-            Paint += (sender, args) =>
-            {
-                Drawer.Draw(sender, args);
-            };
-            
+            Paint += (sender, args) => Drawer.Draw(sender, args);
             KeyDown += Controller.KeyDown;
             Load += (sender, args) => Model.StartGame();
             updateTimer.Start();

@@ -39,5 +39,13 @@ namespace Tetris
 
         public int GetLength()
             => (int)Math.Sqrt(X * X + Y * Y);
+
+        public void Rotate(double angle)
+        {
+            var x = (int)(X * Math.Cos(angle) - Y * Math.Sin(angle));
+            var y = (int)(X * Math.Sin(angle) + Y * Math.Cos(angle));
+            X = x;
+            Y = y;
+        }
     }
 }

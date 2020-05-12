@@ -26,11 +26,9 @@ namespace Tetris
         }
 
         public void MoveTo(Direction direction)
-            => rootBlock.MoveTo(direction);
-
-        public void SetTo(Vector position)
         {
-            rootBlock.SetTo(position);
+            foreach (var b in Blocks)
+                b.MoveTo(direction);
         }
 
         public void Rotate()
@@ -39,9 +37,9 @@ namespace Tetris
                 return;
             for (var i = 1; i < 4; i++)
             {
-                var x = (int)(Blocks[i].Offset.X * Math.Cos(RotateAngle) - Blocks[i].Offset.Y * Math.Sin(RotateAngle));
-                var y = (int)(Blocks[i].Offset.X * Math.Sin(RotateAngle) + Blocks[i].Offset.Y * Math.Cos(RotateAngle));
-                Blocks[i].Offset = new Vector(x, y);
+                var offset = Blocks[i].Position - rootBlock.Position;
+                offset.Rotate(RotateAngle);
+                Blocks[i].SetTo(rootBlock.Position + offset);
             }
         }
     }

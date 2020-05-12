@@ -6,27 +6,9 @@ namespace Tetris
     public class Block
     {
         public const int Size = 20;
-
-        private Vector position;
-        public Vector Position
-        {
-            get
-            {
-                if (HasParent)
-                    position = Parent.Position + Offset;
-                return position;
-            }
-            private set
-            {
-                position = value;
-            }
-        }
+        public Vector Position { get; private set; }
         public Brush Brush { get; private set; }
         public Block Parent { get; set; }
-        public Vector Offset { get; set; }
-
-        public bool HasParent
-            => Parent != null;
 
         public Block(Vector position, Brush brush)
         {
@@ -35,16 +17,10 @@ namespace Tetris
         }
 
         public Block(Block parent, Vector offset, Brush brush)
-            : this(parent.Position + offset, brush)
-        {
-            Parent = parent;
-            this.Offset = offset;
-        }
+            : this(parent.Position + offset, brush) { }
 
         public void MoveTo(Direction direction)
         {
-            if (HasParent)
-                return;
             var moveOffset = Vector.Zero;
             switch (direction)
             {
@@ -68,8 +44,7 @@ namespace Tetris
 
         public void SetTo(Vector position)
         {
-            if (!HasParent)
-                Position = position;
+            Position = position;
         }
     }
 }

@@ -80,9 +80,10 @@ namespace Tetris
         {
             for (var i = 1; i < 4; i++)
             {
-                var x = (int)(figure.Blocks[i].Offset.X * Math.Cos(Figure.RotateAngle) - figure.Blocks[i].Offset.Y * Math.Sin(Figure.RotateAngle)) + figure.Blocks[0].Position.X;
-                var y = (int)(figure.Blocks[i].Offset.X * Math.Sin(Figure.RotateAngle) + figure.Blocks[i].Offset.Y * Math.Cos(Figure.RotateAngle)) + figure.Blocks[0].Position.Y;
-                var fieldPoint = GetOnFieldPoint(new Vector(x, y));
+                var offset = figure.Blocks[i].Position - figure.Blocks[0].Position;
+                offset.Rotate(Figure.RotateAngle);
+                offset += figure.Blocks[0].Position;
+                var fieldPoint = GetOnFieldPoint(offset);
                 if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[fieldPoint.X, fieldPoint.Y] != null)
                     return false;
             }
@@ -233,7 +234,7 @@ namespace Tetris
             if (GameOver != null)
                 GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
         }
-
+        
         private void OnGameStart()
         {
             if (Start != null)
