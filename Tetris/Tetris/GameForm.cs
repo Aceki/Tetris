@@ -21,7 +21,7 @@ namespace Tetris
             var graphicTimer = new Timer();
             updateTimer.Interval = 300;
             graphicTimer.Interval = 1;
-            Model.GameOver += (sender, args) => MessageBox.Show(args.Message, "Game over", MessageBoxButtons.OK);
+            Model.GameOver += (sender, args) => ShowGameOverMessage(args);
             Model.GameOver += (sender, args) => Model.StartGame();
             Model.Exit += (sender, args) =>
             {
@@ -47,6 +47,9 @@ namespace Tetris
             updateTimer.Start();
             graphicTimer.Start();
         }
+
+        public DialogResult ShowGameOverMessage(GameOverEventArgs args)
+            => MessageBox.Show($"{args.Message}\nYour score: {args.Score}", "Game over", MessageBoxButtons.OK);
 
         public DialogResult ShowExitMessage()
             => MessageBox.Show("Вы действительно хотите закончить игру?", "Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question);

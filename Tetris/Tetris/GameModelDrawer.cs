@@ -33,6 +33,7 @@ namespace Tetris
             DrawGameFieldBounds(graphics, PlayAreaPosition);
             DrawNextFigureContainer(graphics, PlayAreaPosition + new Vector(Block.Size * 12, Block.Size * 3));
             DrawHoldFigureContainer(graphics, PlayAreaPosition + new Vector(Block.Size * 12, Block.Size * 11));
+            DrawScore(graphics, PlayAreaPosition + new Vector(-Block.Size * 8, Block.Size*6));
             DrawLineScore(graphics, PlayAreaPosition + new Vector(-Block.Size * 8, Block.Size));
             DrawBlocks(graphics, Model.GetBlocksFromField(), PlayAreaPosition);
         }
@@ -44,6 +45,12 @@ namespace Tetris
                 graphics.DrawLine(new Pen(GridColor), position + new Vector(Block.Size * i, 0), position + new Vector(Block.Size * i, Block.Size * horizontalCount));
             for (var i = 0; i < horizontalCount; i++)
                 graphics.DrawLine(new Pen(GridColor), position + new Vector(0, Block.Size * i), position + new Vector(Block.Size * verticalCount, Block.Size * i));
+        }
+
+        public void DrawScore(Graphics graphics, Vector position)
+        {
+            graphics.DrawString("SCORE", new Font(FontFamily.GenericMonospace, 30), Brushes.White, (Point)position);
+            graphics.DrawString(Model.Score.ToString(), new Font(FontFamily.GenericMonospace, 30), Brushes.White, (Point)(position + new Vector(Block.Size, Block.Size * 2)));
         }
 
         public void DrawLineScore(Graphics graphics, Vector position)

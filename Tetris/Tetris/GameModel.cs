@@ -11,7 +11,8 @@ namespace Tetris
         public readonly Size GameFieldSize;
         public FigureType? HoldedFallingFigureType { get; private set; }
         public FigureType NextFallingFigureType { get; private set; }
-        public int LinesScore { get; set; }
+        public int Score { get; private set; }
+        public int LinesScore { get; private set; }
         public bool GameOnPause { get; set; }
         public bool GameIsOver { get; private set; }
         public event GameOverEventHandler GameOver;
@@ -34,6 +35,7 @@ namespace Tetris
         {
             holdButtonAlredyUse = false;
             GameIsOver = false;
+            Score = 0;
             LinesScore = 0;
             HoldedFallingFigureType = null;
             gameField = new Block[GameFieldSize.Width, GameFieldSize.Height];
@@ -128,7 +130,6 @@ namespace Tetris
 
         public void RemoveFloor(int floorNumber)
         {
-            IncreaseLinesScore();
             for (var x = 0; x < GameFieldSize.Width; x++)
                 gameField[x, floorNumber] = null;
             OnFloorRemoved(floorNumber);
@@ -223,16 +224,21 @@ namespace Tetris
                     yield return block;
         }
 
-        private void IncreaseLinesScore()
+        private void IncreaseLinesScore(int number)
         {
-            LinesScore++;
+            LinesScore += number;
+        }
+
+        private void IncreaseScore(int number)
+        {
+            Score += number;
         }
 
         private void OnGameOver()
         {
             GameIsOver = true;
             if (GameOver != null)
-                GameOver.Invoke(this, new GameOverEventArgs("You lose!"));
+                GameOver.Invoke(this, new GameOverEventArgs() { Message = "You lose!", Score = Score, LinesScore = LinesScore});
         }
         
         private void OnGameStart()
@@ -251,6 +257,7 @@ namespace Tetris
 
         private void OnFigureLanding()
         {
+            IncreaseScore(10);
             fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
             NextFallingFigureType = Tetromino.GetRandomType();
             holdButtonAlredyUse = false;
@@ -260,8 +267,10 @@ namespace Tetris
 
         private void OnFloorRemoved(int floorNumber)
         {
+            IncreaseLinesScore(1);
+            IncreaseScore(100);
             if (FloorRemoved != null)
-                FloorRemoved.Invoke(this, new FloorRemovedEventArgs(floorNumber));
+                FloorRemoved.Invoke(this, new FloorRemovedEventArgs() { FloorNumber = floorNumber });
         }
     }
 }

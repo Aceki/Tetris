@@ -2,11 +2,8 @@
 {
     public class GameOverEventArgs
     {
-        public readonly string Message;
-
-        public GameOverEventArgs(string message)
-        {
-            Message = message;
-        }
+        public string Message { get; set; }
+        public int LinesScore { get; set; }
+        public int Score { get; set; }
     }
 }

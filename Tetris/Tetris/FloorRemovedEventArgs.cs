@@ -8,11 +8,6 @@ namespace Tetris
 {
     public class FloorRemovedEventArgs 
     {
-        public readonly int FloorNumber;
-
-        public FloorRemovedEventArgs(int floorNumber)
-        {
-            FloorNumber = floorNumber;
-        }
+        public int FloorNumber { get; set; }
     }
 }
