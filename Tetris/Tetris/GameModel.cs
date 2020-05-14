@@ -23,7 +23,6 @@ namespace Tetris
 
         private Block[,] gameField;
         private Figure fallingFigure;
-
         private bool holdButtonAlredyUse;
 
         public GameModel(Size gameFieldSize)
@@ -128,25 +127,6 @@ namespace Tetris
             }
         }
 
-        public void RemoveFloor(int floorNumber)
-        {
-            for (var x = 0; x < GameFieldSize.Width; x++)
-                gameField[x, floorNumber] = null;
-            OnFloorRemoved(floorNumber);
-        }
-
-        public void LowerBlocks(int floorNumber)
-        {
-            for (var y = floorNumber; y >= 0; y--)
-                for (var x = 0; x < GameFieldSize.Width; x++)
-                    if (gameField[x, y] != null)
-                    {
-                        gameField[x, y].MoveTo(Direction.Down);
-                        gameField[x, y + 1] = gameField[x, y];
-                        gameField[x, y] = null;
-                    }
-        }
-
         public void AddToGameField(Figure figure)
         {
             foreach (var block in figure.Blocks)
@@ -222,6 +202,25 @@ namespace Tetris
             foreach (var block in gameField)
                 if (block != null)
                     yield return block;
+        }
+
+        private void RemoveFloor(int floorNumber)
+        {
+            for (var x = 0; x < GameFieldSize.Width; x++)
+                gameField[x, floorNumber] = null;
+            OnFloorRemoved(floorNumber);
+        }
+
+        private void LowerBlocks(int floorNumber)
+        {
+            for (var y = floorNumber; y >= 0; y--)
+                for (var x = 0; x < GameFieldSize.Width; x++)
+                    if (gameField[x, y] != null)
+                    {
+                        gameField[x, y].MoveTo(Direction.Down);
+                        gameField[x, y + 1] = gameField[x, y];
+                        gameField[x, y] = null;
+                    }
         }
 
         private void IncreaseLinesScore(int number)

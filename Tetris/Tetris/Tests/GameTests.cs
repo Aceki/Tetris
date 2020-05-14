@@ -16,16 +16,6 @@ namespace Tetris.Tests
             game.AddToGameField(figure);
             Assert.AreEqual(game.GameIsOver, true);
         }
-
-        [Test]
-        public void ScoresIncrease_WhenRemoveFloor()
-        {
-            var game = new GameModel(new Size(10, 20));
-            game.StartGame();
-            game.RemoveFloor(0);
-            game.RemoveFloor(0);
-            Assert.AreEqual(game.LinesScore, 2);
-        }
     }
 }
  
