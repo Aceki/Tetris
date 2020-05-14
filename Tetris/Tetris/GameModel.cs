@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Framework.Internal.Execution;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ namespace Tetris
         public event FloorRemovedEventHandler FloorRemoved;
         public event EventHandler Start;
         public event EventHandler Exit;
+        public event EventHandler FigureDroped;
         public event EventHandler FigureLanded;
 
         private Block[,] gameField;
@@ -185,6 +187,7 @@ namespace Tetris
                 case Keys.Space:
                     while (CanMoveFigureTo(Direction.Down, fallingFigure))
                         fallingFigure.MoveTo(Direction.Down);
+                    OnFigureDroped();
                     break;
                 case Keys.Escape:
                     OnExit();
@@ -261,6 +264,13 @@ namespace Tetris
             holdButtonAlredyUse = false;
             if (FigureLanded != null)
                 FigureLanded.Invoke(this, new EventArgs());
+        }
+
+        private void OnFigureDroped()
+        {
+            IncreaseScore(5);
+            if (FigureDroped != null)
+                FigureDroped.Invoke(this, new EventArgs());
         }
 
         private void OnFloorRemoved(int floorNumber)
