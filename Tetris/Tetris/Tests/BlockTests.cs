@@ -15,5 +15,19 @@ namespace Tetris.Tests
             Assert.AreEqual(childBlock.Position.X, 2);
             Assert.AreEqual(childBlock.Position.Y, 3);
         }
+
+        [Test]
+        public void BlockMoveTo_ReturnsCorrectPosition()
+        {
+            var block = new Block(Vector.Zero, Brushes.White);
+            block.MoveTo(Direction.Right);
+            Assert.AreEqual(block.Position, Vector.Zero + new Vector(Block.Size, 0));
+            block.MoveTo(Direction.Left);
+            Assert.AreEqual(block.Position, Vector.Zero);
+            block.MoveTo(Direction.Up);
+            Assert.AreEqual(block.Position, Vector.Zero + new Vector(0, -Block.Size));
+            block.MoveTo(Direction.Down);
+            Assert.AreEqual(block.Position, Vector.Zero);
+        }
     }
 }

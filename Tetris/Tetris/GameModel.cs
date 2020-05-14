@@ -45,7 +45,7 @@ namespace Tetris
 
         public bool InBounds(Vector point)
         {
-            return point.X >= 0 && point.X < GameFieldSize.Width && point.Y < GameFieldSize.Height;
+            return point.X >= 0 && point.X < GameFieldSize.Width && point.Y < GameFieldSize.Height && point.Y >= 0;
         }
 
         public bool CanMoveFigureTo(Direction direction, Figure figure)
@@ -69,7 +69,7 @@ namespace Tetris
             foreach (var block in figure.Blocks)
             {
                 var fieldPosition = GetOnFieldPoint(block.Position + offset);
-                if (!InBounds(fieldPosition))
+                if (fieldPosition.Y >= 0 && !InBounds(fieldPosition))
                     return false;
                 if (fieldPosition.Y >= 0 && gameField[fieldPosition.X, fieldPosition.Y] != null)
                     return false;
@@ -85,7 +85,7 @@ namespace Tetris
                 offset.Rotate(Figure.RotateAngle);
                 offset += figure.Blocks[0].Position;
                 var fieldPoint = GetOnFieldPoint(offset);
-                if (!InBounds(fieldPoint) || fieldPoint.Y < 0 || gameField[fieldPoint.X, fieldPoint.Y] != null)
+                if (!InBounds(fieldPoint) || gameField[fieldPoint.X, fieldPoint.Y] != null)
                     return false;
             }
             return true;
@@ -137,7 +137,6 @@ namespace Tetris
                     OnGameOver();
                     break;
                 }
-                block.Parent = null;
                 gameField[fieldPoint.X, fieldPoint.Y] = block;
             }
         }

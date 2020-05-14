@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Linq;
 
-namespace Tetris
+namespace Tetris.Tests
 {
     [TestFixture]
     class FigureMoveTests

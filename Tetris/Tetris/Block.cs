@@ -8,7 +8,6 @@ namespace Tetris
         public const int Size = 20;
         public Vector Position { get; private set; }
         public Brush Brush { get; private set; }
-        public Block Parent { get; set; }
 
         public Block(Vector position, Brush brush)
         {
