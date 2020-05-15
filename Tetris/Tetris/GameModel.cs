@@ -146,6 +146,16 @@ namespace Tetris
         public Vector GetOnFieldPoint(Vector point)
             => point / Block.Size;
 
+
+        public IEnumerable<Block> GetBlocksFromField()
+        {
+            foreach (var block in fallingFigure.Blocks)
+                yield return block;
+            foreach (var block in gameField)
+                if (block != null)
+                    yield return block;
+        }
+
         public void KeyDown(Keys key)
         {
             switch (key)
@@ -158,31 +168,17 @@ namespace Tetris
                     if (CanMoveFigureTo(Direction.Left, fallingFigure))
                         fallingFigure.MoveTo(Direction.Left);
                     break;
-                case Keys.W:
-                    if (CanRotateFigure(fallingFigure))
-                        fallingFigure.Rotate();
-                    break;
                 case Keys.S:
                     if (CanMoveFigureTo(Direction.Down, fallingFigure))
                         fallingFigure.MoveTo(Direction.Down);
                     break;
+                case Keys.W:
+                    if (CanRotateFigure(fallingFigure))
+                        fallingFigure.Rotate();
+                    break;
                 case Keys.Tab:
                     if (!holdButtonAlredyUse)
-                    {
-                        if (HoldedFallingFigureType != null)
-                        {
-                            var temp = fallingFigure.Type;
-                            fallingFigure = Tetromino.CreateFigure(HoldedFallingFigureType.Value, FallingFigureSpawnPosition);
-                            HoldedFallingFigureType = temp;
-                        }
-                        else
-                        {
-                            HoldedFallingFigureType = fallingFigure.Type;
-                            fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
-                        }
-                        NextFallingFigureType = Tetromino.GetRandomType();
-                        holdButtonAlredyUse = true;
-                    }
+                        HoldFallingFigure();
                     break;
                 case Keys.Space:
                     while (CanMoveFigureTo(Direction.Down, fallingFigure))
@@ -190,20 +186,30 @@ namespace Tetris
                     OnFigureDroped();
                     break;
                 case Keys.Escape:
+                    GameOnPause = true;
                     OnExit();
+                    GameOnPause = false;
                     break;
                 default:
                     break;
             }
         }
 
-        public IEnumerable<Block> GetBlocksFromField()
+        private void HoldFallingFigure()
         {
-            foreach (var block in fallingFigure.Blocks)
-                yield return block;
-            foreach (var block in gameField)
-                if (block != null)
-                    yield return block;
+            if (HoldedFallingFigureType != null)
+            {
+                var temp = fallingFigure.Type;
+                fallingFigure = Tetromino.CreateFigure(HoldedFallingFigureType.Value, FallingFigureSpawnPosition);
+                HoldedFallingFigureType = temp;
+            }
+            else
+            {
+                HoldedFallingFigureType = fallingFigure.Type;
+                fallingFigure = Tetromino.CreateFigure(NextFallingFigureType, FallingFigureSpawnPosition);
+            }
+            NextFallingFigureType = Tetromino.GetRandomType();
+            holdButtonAlredyUse = true;
         }
 
         private void RemoveFloor(int floorNumber)
@@ -250,10 +256,8 @@ namespace Tetris
 
         private void OnExit()
         {
-            GameOnPause = true;
             if (Exit != null)
                 Exit.Invoke(this, new EventArgs());
-            GameOnPause = false;
         }
 
         private void OnFigureLanding()
